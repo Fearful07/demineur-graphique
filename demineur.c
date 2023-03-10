@@ -17,7 +17,7 @@ void repulso(int** liste, int x, int y, int* size);
 int the_end(SDL_Rect* tab_rect);
 int* delete (int* tab, int size, int indice);
 void revelio(SDL_Rect* tab_rect, int x, int y);
-int boxText(SDL_Renderer* renderer, SDL_Color black, SDL_Color white, int msg_choice ,int replay);
+void boxText(SDL_Renderer* renderer, SDL_Color black, SDL_Color white, int msg_choice);
 
 
 #define TOTAL_SIZE (SIZE*SIZE)
@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
     };
 
     /*GESTION DES ERREURS DE SDL*/
-    /* Initialisation, création de la fenêtre et du renderer. */
+    /* Initialisation, crÃ©ation de la fenÃªtre et du renderer. */
     if (0 != SDL_Init(SDL_INIT_EVERYTHING))
     {
         fprintf(stderr, "Erreur SDL_Init : %s", SDL_GetError());
@@ -104,24 +104,22 @@ int main(int argc, char* argv[])
     /*GAME LOOP*/
     SDL_Rect screen = { 0, 0, 1200, 800 };
 
-    SDL_Texture* monImage = SDL_CreateTextureFromSurface(renderer, image);  //La texture monImage contient maintenant l'image importée
+    SDL_Texture* monImage = SDL_CreateTextureFromSurface(renderer, image);  //La texture monImage contient maintenant l'image importÃ©e
     SDL_RenderCopy(renderer, monImage, NULL, &screen);
     int game = 1;
-    int rep = 0;
-    int replay = 0;
     SDL_Event ev;
-    const int fps = 60;
     int* liste = NULL;
     srand(time(NULL));
     int convert[2];
     init_grid(tab_rect);
     Mix_Music* musique;
+    Mix_Music* victory;
     musique = Mix_LoadMUS("music/guardian.mp3");
+    victory = Mix_LoadMUS("music/amongus.mp3");
     Mix_PlayMusic(musique, -1);
     Mix_VolumeMusic(MIX_MAX_VOLUME / 8);
     SDL_RenderPresent(renderer);
-
-    boxText(renderer, black, white, 1, replay);
+    boxText(renderer, black, white, 1);
     SDL_RenderPresent(renderer);
 
     SDL_Event event;
@@ -232,13 +230,16 @@ int main(int argc, char* argv[])
             }
         }
         if (the_end(tab_rect) == 0) {
-            printf("gagné");
+            Mix_PauseMusic(musique);
+            Mix_PlayMusic(victory, -1);
+            printf("gagnÃ©");
             SDL_Delay(3000);
             goto Quit;
         }
         print_tab(renderer, tab_rect, purple, dark_blue, dark, flag, number, meteorite);
     }
     Mix_FreeMusic(musique);
+    Mix_FreeMusic(victory);
     Mix_CloseAudio();
     statut = EXIT_SUCCESS;
 
@@ -289,7 +290,7 @@ void print_tab(SDL_Renderer* renderer, SDL_Rect* tab_rect, SDL_Color purple, SDL
             if (tab_rect[i].value != 0) {
 
                 SDL_Rect rectNumb = { tab_rect[i].x,tab_rect[i].y, 50, 50 };
-                SDL_Texture* numberTest = SDL_CreateTextureFromSurface(renderer, number[(tab_rect[i].value) - 1]);  //La texture monImage contient maintenant l'image importée
+                SDL_Texture* numberTest = SDL_CreateTextureFromSurface(renderer, number[(tab_rect[i].value) - 1]);  //La texture monImage contient maintenant l'image importÃ©e
                 SDL_RenderCopy(renderer, numberTest, NULL, &rectNumb);
             }
             if (tab_rect[i].bomb == 1) {
@@ -305,7 +306,7 @@ void print_tab(SDL_Renderer* renderer, SDL_Rect* tab_rect, SDL_Color purple, SDL
             SDL_RenderFillRect(renderer, &tab_rect[i]);
             if (tab_rect[i].flag == 1) {
                 SDL_Rect rectImg = { tab_rect[i].x,tab_rect[i].y, 50, 50 };
-                SDL_Texture* monImage1 = SDL_CreateTextureFromSurface(renderer, flag);  //La texture monImage contient maintenant l'image importée
+                SDL_Texture* monImage1 = SDL_CreateTextureFromSurface(renderer, flag);  //La texture monImage contient maintenant l'image importÃ©e
                 SDL_RenderCopy(renderer, monImage1, NULL, &rectImg);
             }
         }
@@ -321,10 +322,10 @@ int transform(int pos_x, int pos_y, int* convert) {
 }
 
 void number_creator(SDL_Renderer* renderer, SDL_Rect* tab_rect) {
-    // Création des nombres qui déterminent les bombes autour de la case ciblée
+    // CrÃ©ation des nombres qui dÃ©terminent les bombes autour de la case ciblÃ©e
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
-            // Pour chaque élément du tableau cela va lancer la fonction around
+            // Pour chaque Ã©lÃ©ment du tableau cela va lancer la fonction around
 
             tab_rect[anticonvert(i, j)].value = around(tab_rect, i, j);
         }
@@ -339,7 +340,7 @@ int around(SDL_Rect* tab_rect, int x, int y) {
 
     int count;
     count = 0;
-    // On vérifie combien de bombe y-a-t-il autour de la case ciblée
+    // On vÃ©rifie combien de bombe y-a-t-il autour de la case ciblÃ©e
 
     // partie gauche
     if (y != 0 && tab_rect[anticonvert(x - 1, y - 1)].bomb == 1) {
@@ -374,8 +375,8 @@ int around(SDL_Rect* tab_rect, int x, int y) {
 }
 
 void revelio(SDL_Rect* tab_rect, int x, int y) {
-    // En gros je regarde si la case à coté est vide ET non révélée sur la grille
-    // du joueur (emplaçement non révélée = 10) Puis je fais un appel récursif
+    // En gros je regarde si la case Ã  cotÃ© est vide ET non rÃ©vÃ©lÃ©e sur la grille
+    // du joueur (emplaÃ§ement non rÃ©vÃ©lÃ©e = 10) Puis je fais un appel rÃ©cursif
     // pour revele la case et y appliquer la fonction
 
     if (x < 0 || x >= SIZE)
@@ -403,7 +404,7 @@ void revelio(SDL_Rect* tab_rect, int x, int y) {
 }
 
 int anticonvert(int x, int y) {
-    // Convertit des coordonnées x et y en coordonnées unidimentionelles (de 0 à
+    // Convertit des coordonnÃ©es x et y en coordonnÃ©es unidimentionelles (de 0 Ã 
     // 400)
     int coo = 0;
     coo = x * SIZE + y;
@@ -420,7 +421,7 @@ int verif_input(int x, int y) {
 }
 
 void repulso(int** liste, int x, int y, int* size) {
-    //Fonction qui crée le petit ilot au début de la partie 
+    //Fonction qui crÃ©e le petit ilot au dÃ©but de la partie 
     int elem = anticonvert(x, y);
     int sous = 0;
     int taille = TOTAL_SIZE;
@@ -445,7 +446,7 @@ void repulso(int** liste, int x, int y, int* size) {
 }
 
 int the_end(SDL_Rect* tab_rect) {
-    //Fonction qui vérifie si le joueur a gagné
+    //Fonction qui vÃ©rifie si le joueur a gagnÃ©
     for (int i = 0; i < TOTAL_SIZE; i++) {
         if (tab_rect[i].hide == 1 && tab_rect[i].bomb == 0) {
             return 1;
@@ -471,7 +472,7 @@ void bombarda(int* grilleTemp, SDL_Rect* tab_rect, int size) {
 }
 
 int* delete (int* tab, int size, int indice) {
-    //fonction qui enleve un élément d'une liste, parametre( le tableau visé, la taille du tableau, l'indice de l'element qu'on veut virer)
+    //fonction qui enleve un Ã©lÃ©ment d'une liste, parametre( le tableau visÃ©, la taille du tableau, l'indice de l'element qu'on veut virer)
     size--; //size -- car i vaut 0 dans la premiere boucle de bombarda
 
     int* newTab = (int*)malloc(sizeof(int) * size);
@@ -485,7 +486,7 @@ int* delete (int* tab, int size, int indice) {
     return newTab;
 }
 
-int boxText(SDL_Renderer* renderer, SDL_Color black, SDL_Color white, int msg_choice, int replay) {
+void boxText(SDL_Renderer* renderer, SDL_Color black, SDL_Color white, int msg_choice) {
     TTF_Init();
     SDL_Color textColor = { 255, 255, 255 };
     TTF_Font* font = TTF_OpenFont("font/fontRegular.ttf", 24);
@@ -519,24 +520,7 @@ int boxText(SDL_Renderer* renderer, SDL_Color black, SDL_Color white, int msg_ch
         if (NULL != Text)
             SDL_DestroyTexture(Text);
     }
-    if (msg_choice == 0) {
-        SDL_Rect yes = { 420,670,100,100 };
-        SDL_Surface* yesSurface = TTF_RenderText_Solid(font, "Oui", textColor);
-        SDL_Texture* yesTexture = SDL_CreateTextureFromSurface(renderer, yesSurface);
-        SDL_RenderCopy(renderer, yesTexture, NULL, &yes);
-
-        SDL_Rect no = { 700,670, 100,100 };
-        SDL_Surface* noSurface = TTF_RenderText_Solid(font, "no", textColor);
-        SDL_Texture* noTexture = SDL_CreateTextureFromSurface(renderer, noSurface);
-        SDL_RenderCopy(renderer, noTexture, NULL, &no);
-
-        SDL_RenderPresent(renderer);
-    }
-
-    replay = 1;
-
 
     if (NULL != font)
         TTF_CloseFont(font);
-    return replay;
 }
