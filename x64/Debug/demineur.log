@@ -1,0 +1,17 @@
+﻿  demineur.c
+C:\Users\Utilisateur\source\repos\demineur\demineur\demineur.c(30,1): warning C4005: 'true' : redéfinition de macro
+C:\Users\Utilisateur\source\repos\demineur\demineur\demineur.c(29,1): message : voir la définition précédente de 'true'
+C:\Users\Utilisateur\source\repos\demineur\demineur\demineur.c(115,11): warning C4013: 'time' non défini(e) ; extern retournant int pris par défaut
+C:\Users\Utilisateur\source\repos\demineur\demineur\demineur.c(151,25): warning C4033: 'SDL_main' doit retourner une valeur
+C:\Users\Utilisateur\source\repos\demineur\demineur\demineur.c(251,28): warning C4133: 'fonction' : types incompatibles - de 'SDL_Surface *' à 'SDL_Texture *'
+C:\Users\Utilisateur\source\repos\demineur\demineur\demineur.c(253,28): warning C4133: 'fonction' : types incompatibles - de 'SDL_Surface *' à 'SDL_Texture *'
+C:\Users\Utilisateur\source\repos\demineur\demineur\demineur.c(256,38): warning C4133: 'fonction' : types incompatibles - de 'SDL_Surface *' à 'SDL_Texture *'
+C:\Users\Utilisateur\source\repos\demineur\demineur\demineur.c(258,34): warning C4047: 'fonction' : les niveaux d'indirection de 'SDL_Texture *' et de 'SDL_Surface *[8]' sont différents
+C:\Users\Utilisateur\source\repos\demineur\demineur\demineur.c(258,28): warning C4024: 'SDL_DestroyTexture' : types différents pour le paramètre formel et réel 1
+C:\Users\Utilisateur\source\repos\demineur\demineur\demineur.c(261,39): warning C4133: 'fonction' : types incompatibles - de 'SDL_Surface *' à 'SDL_Texture *'
+C:\Users\Utilisateur\source\repos\demineur\demineur\demineur.c(263,35): warning C4047: 'fonction' : les niveaux d'indirection de 'SDL_Texture *' et de 'SDL_Surface *[30]' sont différents
+C:\Users\Utilisateur\source\repos\demineur\demineur\demineur.c(263,28): warning C4024: 'SDL_DestroyTexture' : types différents pour le paramètre formel et réel 1
+C:\Users\Utilisateur\source\repos\demineur\demineur\demineur.c(510,25): warning C4013: 'strlen' non défini(e) ; extern retournant int pris par défaut
+C:\Users\Utilisateur\source\repos\demineur\demineur\demineur.c(268): warning C4715: 'SDL_main' : les chemins de contrôle ne retournent pas tous une valeur
+C:\Users\Utilisateur\source\repos\demineur\demineur\demineur.c(321): warning C4716: 'transform' : doit retourner une valeur
+  demineur.vcxproj -> C:\Users\Utilisateur\source\repos\demineur\x64\Debug\demineur.exe
