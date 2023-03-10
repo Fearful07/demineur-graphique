@@ -222,12 +222,13 @@ int main(int argc, char* argv[])
                 }
                 if (ev.button.button == SDL_BUTTON_RIGHT)
                     transform(ev.button.x, ev.button.y, convert);
-                
-                if (tab_rect[anticonvert(convert[0], convert[1])].flag == 0) {
-                    tab_rect[anticonvert(convert[0], convert[1])].flag = 1;
-                }
-                else if (tab_rect[anticonvert(convert[0], convert[1])].flag == 1) {
-                    tab_rect[anticonvert(convert[0], convert[1])].flag = 0;
+                if (verif_input(convert[0], convert[1]) == 1) {
+                    if (tab_rect[anticonvert(convert[0], convert[1])].flag == 0) {
+                        tab_rect[anticonvert(convert[0], convert[1])].flag = 1;
+                    }
+                    else if (tab_rect[anticonvert(convert[0], convert[1])].flag == 1) {
+                        tab_rect[anticonvert(convert[0], convert[1])].flag = 0;
+                    }
                 }
             }
         }
